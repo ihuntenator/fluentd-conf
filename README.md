@@ -1,3 +1,4 @@
 # fluentd.conf
 
-Configuration files for fluentd and td-agent.
+Configuration file for fluentd.
+
