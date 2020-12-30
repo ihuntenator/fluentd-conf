@@ -41,18 +41,19 @@
   @type record_transformer
   <record>
     container_id ${tag_parts[5]}
+    tag ${tag}
   </record>
 </filter>
 
-### Throw away ignore tags
-#<match ignore.**>
-#  @type null
-#</match>
+## Throw away ignore tags
+<match ignore.**>
+  @type null
+</match>
 
-### Events to stdout
-#<match **>
-#  @type stdout
-#</match>
+## Events to stdout
+<match **>
+  @type stdout
+</match>
 
 ## Events to HEC
 <match **>
