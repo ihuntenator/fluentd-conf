@@ -1,4 +1,4 @@
 # fluentd.conf
 
-Configuration file for fluentd.
+Single configuration file for fluentd to read docker logs, filter, and output the events to HEC.
 
