@@ -1,28 +1,3 @@
-## uncomment for increase verbosity
-DAEMON_ARGS=-vv
-
-## copy tag=debug.** event stream to std out from CLI or logs from daemon
-#<match debug.**>
-#  @type stdout
-#  @id output_stdout
-#</match>
-
-## live debugging agent
-#<source>
-#  @type debug_agent
-#  @id input_debug_agent
-#  bind 127.0.0.1
-#  port 24230
-#</source>
-
-## Monitor port
-## RESTful API can query with curl like: curl http://localhost:24220/api/plugins
-#<source>
-#  @type monitor_agent
-#  bind 0.0.0.0
-#  port 24220
-#</source>
-
 ## Read the docker json-file container logs
 <source>
   @type tail
@@ -43,16 +18,6 @@ DAEMON_ARGS=-vv
     container_id ${tag_parts[5]}
   </record>
 </filter>
-
-### Throw away ignore tags
-#<match ignore.**>
-#  @type null
-#</match>
-
-### Events to stdout
-#<match **>
-#  @type stdout
-#</match>
 
 ## Events to HEC
 <match **>
