@@ -1,0 +1,52 @@
+## uncomment for increase verbosity
+#DAEMON_ARGS=-vv
+
+## copy tag=debug.** event stream to std out from CLI or logs from daemon
+<match debug.**>
+  @type stdout
+  @id output_stdout
+</match>
+
+## live debugging agent
+<source>
+  @type debug_agent
+  @id input_debug_agent
+  bind 127.0.0.1
+  port 24230
+</source>
+
+## Monitor port
+## RESTful API can query with curl like: curl http://localhost:24220/api/plugins
+<source>
+  @type monitor_agent
+  bind 0.0.0.0
+  port 24220
+</source>
+
+## Log output JSON
+<system>
+  <log>
+    format json
+    time_format %Y-%m-%d
+  </log>
+</system>
+
+## Listener TCP event stream (used by fluent-cat)
+<source>
+  @type forward
+  port 24224
+  bind 0.0.0.0
+</source>
+
+## fluent logs to stdout
+<label @FLUENT_LOG>
+  <match fluent.*>
+    @type stdout
+  </match>
+</label>
+
+## Test events to stdout
+<match test.forward>
+  @type stdout
+  @id output_stdout
+</match>
