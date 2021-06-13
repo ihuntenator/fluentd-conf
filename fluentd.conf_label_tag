@@ -13,11 +13,18 @@
   bind 0.0.0.0
 </source>
 
+## Set hostname
+<filter **>
+  @type record_transformer
+  <record>
+    hostname "#{Socket.gethostname}"
+  </record>
+</filter>
 
 ## Read the docker json-file container logs
 <source>
   @type tail
-  @id in_tail_container_logs
+  @label @CONTAINER
   path /var/lib/docker/containers/*/*-json.log
   pos_file /fluentd/log/containers.log.pos
   time_format "%Y-%m-%dT%H:%M:%S.%L%Z"
