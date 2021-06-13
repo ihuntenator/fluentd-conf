@@ -42,6 +42,15 @@
   </record>
 </filter>
 
+## filter to truncate container id
+<filter docker.var.lib.docker.containers.*.*.log>
+  @type grep
+  <regexp>
+    key container_id
+    pattern /^s\S{12}/
+  </regexp>
+</filter>
+
 ## Events to HEC
 <match **>
   @type splunk_hec
