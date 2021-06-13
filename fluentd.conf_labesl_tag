@@ -1,0 +1,55 @@
+## Log output JSON
+<system>
+  <log>
+    format json
+    time_format "%Y-%m-%dT%H:%M:%S.%L%Z"
+  </log>
+</system>
+
+## Listener TCP event stream (used by fluent-cat)
+<source>
+  @type forward
+  port 24224
+  bind 0.0.0.0
+</source>
+
+
+## Read the docker json-file container logs
+<source>
+  @type tail
+  @id in_tail_container_logs
+  path /var/lib/docker/containers/*/*-json.log
+  pos_file /fluentd/log/containers.log.pos
+  time_format "%Y-%m-%dT%H:%M:%S.%L%Z"
+  keep_time_key true
+  read_from_head true
+  tag "docker.*"
+  format json
+</source>
+
+## filter to add container id
+<filter docker.var.lib.docker.containers.*.*.log>
+  @type record_transformer
+  <record>
+    container_id ${tag_parts[5]}
+  </record>
+</filter>
+
+## Events to HEC
+<match **>
+  @type splunk_hec
+  <buffer>
+    @type file
+    path /var/log/fluentd/buffer/tfe
+    flush_mode immediate
+    flush_thread_count 4
+    chunk_limit_size 8M
+    queue_limit_length 4
+  </buffer>
+  host 192.168.1.71
+  port 8088
+  token 567a96fe-527c-4383-b0c4-57a4341929c1
+  use_ack false
+  use_ssl true
+  ssl_verify false
+</match>
